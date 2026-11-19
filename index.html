@@ -17,6 +17,44 @@
 body {
   background: #f7f7f7;
   color: #222;
+  /* DARK MODE */
+body.dark-mode {
+  background: #121212;
+  color: #ffffff;
+}
+
+body.dark-mode header {
+  background: #1e1e1e;
+}
+
+body.dark-mode .food {
+  background: #222222;
+  color: white;
+}
+
+body.dark-mode .food p {
+  color: #bbbbbb;
+}
+
+body.dark-mode .cart {
+  background: #222222;
+  color: white;
+}
+
+body.dark-mode .search input {
+  background: #222222;
+  color: white;
+  border: 1px solid #444;
+}
+
+body.dark-mode .categories button {
+  background: #222222;
+  color: white;
+}
+
+body.dark-mode h2 {
+  color: white;
+}
 }
 
 header {
@@ -146,6 +184,10 @@ footer {
 <header>
   <h1>SANJEEV</h1>
   <p>Delicious Food, Delivered To You!</p>
+  <button id="themeToggle"
+style="padding:10px 18px; margin:10px; border:none; border-radius:20px; background:#222; color:white; cursor:pointer;">
+  🌙 Dark Mode
+  </button>
 
   <p id="userWelcome" style="margin-top:10px; font-weight:bold;"></p>
 
@@ -546,6 +588,32 @@ onAuthStateChanged(auth, (user) => {
 };
     
 
+  </script>
+  <script>
+const themeButton = document.getElementById("themeToggle");
+
+// Load saved theme
+if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark-mode");
+    themeButton.innerHTML = "☀️ Light Mode";
+} else {
+    themeButton.innerHTML = "🌙 Dark Mode";
+}
+
+// Switch theme
+themeButton.addEventListener("click", function() {
+
+    document.body.classList.toggle("dark-mode");
+
+    if (document.body.classList.contains("dark-mode")) {
+        localStorage.setItem("theme", "dark");
+        themeButton.innerHTML = "☀️ Light Mode";
+    } else {
+        localStorage.setItem("theme", "light");
+        themeButton.innerHTML = "🌙 Dark Mode";
+    }
+
+});
   </script>
 </body>
 </html>
