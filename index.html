@@ -6,6 +6,7 @@
 <title>SANJEEV - Food Delivery</title>
 
 <style>
+
 * {
   margin: 0;
   padding: 0;
@@ -19,28 +20,11 @@ body {
   transition: 0.3s;
 }
 
+/* DARK MODE */
+
 body.dark-mode {
   background: #121212;
   color: white;
-}
-
-header {
-  background: #e23744;
-  color: white;
-  padding: 20px;
-  text-align: center;
-}
-
-header h1 {
-  font-size: 30px;
-}
-
-header p {
-  margin-top: 6px;
-}
-
-button {
-  cursor: pointer;
 }
 
 body.dark-mode header,
@@ -95,30 +79,45 @@ body.dark-mode .profile-dropdown button:hover {
   background: #333;
 }
 
-body.dark-mode .bill-details {
-  background: #333;
+/* HEADER */
+
+header {
+  background: #e23744;
+  color: white;
+  padding: 20px;
+  text-align: center;
 }
 
-body.dark-mode .cart-item {
-  border-color: #555;
+header h1 {
+  font-size: 30px;
 }
 
-/* HEADER BUTTONS */
+header p {
+  margin-top: 6px;
+}
 
-#themeToggle,
+button {
+  cursor: pointer;
+}
+
+/* THEME BUTTON */
+
+#themeToggle {
+  padding: 10px 18px;
+  margin: 10px;
+  border: none;
+  border-radius: 20px;
+  background: #222;
+  color: white;
+}
+
+/* LOCATION */
+
 #locationButton {
   padding: 10px 18px;
   margin: 10px;
   border: none;
   border-radius: 20px;
-}
-
-#themeToggle {
-  background: #222;
-  color: white;
-}
-
-#locationButton {
   background: white;
   color: #e23744;
 }
@@ -217,7 +216,7 @@ body.dark-mode .cart-item {
   border-top: 1px solid #eee !important;
 }
 
-/* AUTH */
+/* AUTH BUTTONS */
 
 #authButtons {
   margin-top: 15px;
@@ -290,7 +289,7 @@ h2 {
 
 .food img {
   width: 100%;
-  height: 150px;
+  height: 125px;
   object-fit: cover;
 }
 
@@ -313,7 +312,8 @@ h2 {
   font-weight: bold;
 }
 
-.food button {
+.food button,
+.checkout {
   width: 100%;
   padding: 10px;
   border: none;
@@ -323,7 +323,7 @@ h2 {
   margin-top: 10px;
 }
 
-/* ADVANCED CART */
+/* CART */
 
 .cart {
   background: white;
@@ -332,102 +332,11 @@ h2 {
   border-radius: 12px;
 }
 
-.cart h2 {
-  margin: 0 0 15px;
-}
-
-.cart-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 0;
-  border-bottom: 1px solid #ddd;
-  gap: 10px;
-}
-
-.cart-item-info {
-  flex: 1;
-}
-
-.cart-item-info h4 {
-  margin-bottom: 5px;
-}
-
-.cart-item-info p {
-  font-size: 13px;
-  color: #777;
-}
-
-.quantity-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.quantity-controls button {
-  width: 30px;
-  height: 30px;
-  border: none;
-  background: #e23744;
-  color: white;
-  border-radius: 5px;
-}
-
-.remove-btn {
-  background: #dc3545;
-  color: white;
-  border: none;
-  padding: 7px 10px;
-  border-radius: 5px;
-}
-
-.coupon-box {
-  display: flex;
-  gap: 10px;
-  margin: 20px 0;
-}
-
-.coupon-box input {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
-
-.coupon-box button {
-  background: #28a745;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 8px;
-}
-
-.bill-details {
-  background: #f8f8f8;
-  padding: 15px;
-  border-radius: 10px;
-  margin-top: 20px;
-}
-
-.bill-details p {
-  display: flex;
-  justify-content: space-between;
+.cart p {
   margin: 10px 0;
 }
 
-.checkout {
-  width: 100%;
-  padding: 15px;
-  background: #e23744;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  margin-top: 15px;
-}
-
-/* TRACK */
+/* TRACK ORDER */
 
 .track-section {
   background: white;
@@ -519,11 +428,8 @@ footer {
     width: 200px;
   }
 
-  .cart-item {
-    flex-wrap: wrap;
-  }
-
 }
+
 </style>
 </head>
 
@@ -567,19 +473,37 @@ footer {
 
     </div>
 
+    <!-- PROFILE DROPDOWN -->
+
     <div id="profileDropdown" class="profile-dropdown">
 
-      <button onclick="showProfile()">👤 My Profile</button>
-      <button onclick="showOrders()">📦 My Orders</button>
-      <button onclick="showAddresses()">📍 Saved Addresses</button>
-      <button onclick="showFavorites()">❤️ Favorites</button>
-      <button onclick="showSettings()">⚙️ Settings</button>
+      <button onclick="showProfile()">
+        👤 My Profile
+      </button>
+
+      <button onclick="showOrders()">
+        📦 My Orders
+      </button>
+
+      <button onclick="showAddresses()">
+        📍 Saved Addresses
+      </button>
+
+      <button onclick="showFavorites()">
+        ❤️ Favorites
+      </button>
+
+      <button onclick="showSettings()">
+        ⚙️ Settings
+      </button>
 
       <button id="dropdownLogout" class="logout-option">
         🚪 Logout
       </button>
 
     </div>
+
+    <!-- LOGIN AND SIGNUP -->
 
     <div id="authButtons">
 
@@ -623,11 +547,26 @@ footer {
 
 <div class="categories">
 
-  <button class="active" onclick="filterFood('All',this)">All</button>
-  <button onclick="filterFood('Biryani',this)">Biryani</button>
-  <button onclick="filterFood('Pizza',this)">Pizza</button>
-  <button onclick="filterFood('Burger',this)">Burger</button>
-  <button onclick="filterFood('Dosa',this)">Dosa</button>
+  <button class="active"
+    onclick="filterFood('All',this)">
+    All
+  </button>
+
+  <button onclick="filterFood('Biryani',this)">
+    Biryani
+  </button>
+
+  <button onclick="filterFood('Pizza',this)">
+    Pizza
+  </button>
+
+  <button onclick="filterFood('Burger',this)">
+    Burger
+  </button>
+
+  <button onclick="filterFood('Dosa',this)">
+    Dosa
+  </button>
 
 </div>
 
@@ -635,95 +574,78 @@ footer {
 
 <div class="food-list" id="foodList"></div>
 
-<!-- ADVANCED CART -->
+<!-- CART -->
 
 <section class="cart">
 
   <h2>🛒 Your Cart</h2>
 
-  <div id="cartItems"></div>
-
-  <div class="coupon-box">
-
-    <input
-      type="text"
-      id="couponInput"
-      placeholder="Enter coupon code">
-
-    <button onclick="applyCoupon()">Apply</button>
-
+  <div id="cartItems">
+    Your cart is empty.
   </div>
 
-  <p id="couponMessage"></p>
-
-  <div class="bill-details">
-
-    <p>
-      Item Total:
-      <span id="subtotal">₹0</span>
-    </p>
-
-    <p>
-      Delivery Fee:
-      <span id="deliveryFee">₹0</span>
-    </p>
-
-    <p>
-      Platform Fee:
-      <span id="platformFee">₹0</span>
-    </p>
-
-    <p>
-      Discount:
-      <span id="discount">₹0</span>
-    </p>
-
-    <hr>
-
-    <h3 style="display:flex;justify-content:space-between;margin-top:15px;">
-      Grand Total:
-      <span id="grandTotal">₹0</span>
-    </h3>
-
-  </div>
+  <p>Total: ₹<span id="total">0</span></p>
 
   <button class="checkout" onclick="checkout()">
-    Proceed to Checkout
+    Place Order
   </button>
 
 </section>
 
-<!-- LOGIN -->
+<!-- LOGIN FORM -->
 
 <div id="loginForm" class="modal">
 
   <h2>Login</h2>
 
-  <input type="email" id="loginEmail" placeholder="Email">
+  <input
+    type="email"
+    id="loginEmail"
+    placeholder="Email">
 
-  <input type="password" id="loginPassword" placeholder="Password">
+  <input
+    type="password"
+    id="loginPassword"
+    placeholder="Password">
 
-  <button id="loginBtn" class="formButton">Login</button>
+  <button id="loginBtn" class="formButton">
+    Login
+  </button>
 
-  <button onclick="closeForm()" class="closeButton">Close</button>
+  <button onclick="closeForm()" class="closeButton">
+    Close
+  </button>
 
 </div>
 
-<!-- SIGNUP -->
+<!-- SIGNUP FORM -->
 
 <div id="signupForm" class="modal">
 
   <h2>Signup</h2>
 
-  <input type="text" id="signupName" placeholder="Full Name">
+  <input
+    type="text"
+    id="signupName"
+    placeholder="Full Name">
 
-  <input type="email" id="signupEmail" placeholder="Email">
+  <input
+    type="email"
+    id="signupEmail"
+    placeholder="Email">
 
-  <input type="password" id="signupPassword" placeholder="Password">
+  <input
+    type="password"
+    id="signupPassword"
+    placeholder="Password">
 
-  <button id="signupBtn" class="formButton">Create Account</button>
+  <button id="signupBtn" class="formButton">
+    Create Account
+  </button>
 
-  <button onclick="closeForm()" class="closeButton">Cancel</button>
+  <button onclick="closeForm()" class="closeButton">
+    Cancel
+  </button>
 
 </div>
 
@@ -735,13 +657,20 @@ footer {
     Track Your Order 🚚
   </h2>
 
-  <input type="text" id="orderId" placeholder="Enter Order ID">
+  <input
+    type="text"
+    id="orderId"
+    placeholder="Enter Order ID">
 
-  <button onclick="trackOrder()">Track Order</button>
+  <button onclick="trackOrder()">
+    Track Order
+  </button>
 
   <div id="trackingResult" style="margin-top:20px;"></div>
 
 </section>
+
+<!-- FOOTER -->
 
 <footer>
 
@@ -753,9 +682,9 @@ footer {
 
 </footer>
 
-<script>
+<!-- FOOD WEBSITE SCRIPT -->
 
-/* FOOD DATA */
+<script>
 
 const foods = [
 
@@ -803,15 +732,8 @@ const foods = [
 
 ];
 
-
-/* CART DATA */
-
 let selected = "All";
-
-let cart = JSON.parse(localStorage.getItem("sanjeevCart")) || [];
-
-let appliedCoupon = localStorage.getItem("sanjeevCoupon") || "";
-
+let cart = [];
 
 /* DISPLAY FOOD */
 
@@ -823,7 +745,9 @@ function showFoods() {
 
   const filtered = foods.filter(food =>
 
-    (selected === "All" || food.category === selected) &&
+    (selected === "All" ||
+      food.category === selected) &&
+
     food.name.toLowerCase().includes(search)
 
   );
@@ -856,7 +780,6 @@ function showFoods() {
 
 }
 
-
 /* FILTER FOOD */
 
 function filterFood(category, button) {
@@ -872,296 +795,45 @@ function filterFood(category, button) {
 
 }
 
-
 /* ADD TO CART */
 
 function addCart(name) {
 
   const food = foods.find(item => item.name === name);
 
-  if (!food) return;
+  if (food) {
 
-  const existingItem = cart.find(item => item.name === name);
+    cart.push(food);
 
-  if (existingItem) {
-
-    existingItem.quantity++;
-
-  } else {
-
-    cart.push({
-      name: food.name,
-      price: food.price,
-      quantity: 1
-    });
+    updateCart();
 
   }
 
-  saveCart();
-
-  updateCart();
-
 }
-
-
-/* INCREASE QUANTITY */
-
-function increaseQty(index) {
-
-  cart[index].quantity++;
-
-  saveCart();
-
-  updateCart();
-
-}
-
-
-/* DECREASE QUANTITY */
-
-function decreaseQty(index) {
-
-  cart[index].quantity--;
-
-  if (cart[index].quantity <= 0) {
-
-    cart.splice(index, 1);
-
-  }
-
-  saveCart();
-
-  updateCart();
-
-}
-
-
-/* REMOVE ITEM */
-
-function removeItem(index) {
-
-  cart.splice(index, 1);
-
-  saveCart();
-
-  updateCart();
-
-}
-
-
-/* SAVE CART */
-
-function saveCart() {
-
-  localStorage.setItem(
-    "sanjeevCart",
-    JSON.stringify(cart)
-  );
-
-}
-
-
-/* COUPON SYSTEM */
-
-function applyCoupon() {
-
-  const coupon = document
-    .getElementById("couponInput")
-    .value.trim()
-    .toUpperCase();
-
-  const subtotal = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
-
-  const message = document.getElementById("couponMessage");
-
-  if (coupon === "SAVE50" && subtotal >= 300) {
-
-    appliedCoupon = "SAVE50";
-
-    message.innerHTML = "✅ ₹50 discount applied!";
-
-    message.style.color = "green";
-
-  }
-
-  else if (coupon === "WELCOME10" && subtotal >= 200) {
-
-    appliedCoupon = "WELCOME10";
-
-    message.innerHTML = "✅ 10% discount applied!";
-
-    message.style.color = "green";
-
-  }
-
-  else {
-
-    appliedCoupon = "";
-
-    message.innerHTML =
-      "❌ Invalid coupon or minimum order not reached.";
-
-    message.style.color = "red";
-
-  }
-
-  localStorage.setItem("sanjeevCoupon", appliedCoupon);
-
-  updateCart();
-
-}
-
 
 /* UPDATE CART */
 
 function updateCart() {
 
-  const cartItems = document.getElementById("cartItems");
+  let total = 0;
 
-  let subtotal = 0;
+  document.getElementById("cartItems").innerHTML =
 
-  if (cart.length === 0) {
+    cart.length
 
-    cartItems.innerHTML = `
+      ? cart.map(food => {
 
-      <div style="text-align:center;padding:30px;">
+          total += food.price;
 
-        <h3>🛒 Your Cart is Empty</h3>
+          return `<p>${food.name} - ₹${food.price}</p>`;
 
-        <p>Add delicious food to get started!</p>
+        }).join("")
 
-      </div>
+      : "Your cart is empty.";
 
-    `;
-
-    document.getElementById("subtotal").innerText = "₹0";
-
-    document.getElementById("deliveryFee").innerText = "₹0";
-
-    document.getElementById("platformFee").innerText = "₹0";
-
-    document.getElementById("discount").innerText = "₹0";
-
-    document.getElementById("grandTotal").innerText = "₹0";
-
-    document.getElementById("couponMessage").innerText = "";
-
-    appliedCoupon = "";
-
-    localStorage.removeItem("sanjeevCoupon");
-
-    return;
-
-  }
-
-
-  cartItems.innerHTML = "";
-
-  cart.forEach((item, index) => {
-
-    const itemTotal = item.price * item.quantity;
-
-    subtotal += itemTotal;
-
-    cartItems.innerHTML += `
-
-      <div class="cart-item">
-
-        <div class="cart-item-info">
-
-          <h4>${item.name}</h4>
-
-          <p>₹${item.price} × ${item.quantity}</p>
-
-          <strong>₹${itemTotal}</strong>
-
-        </div>
-
-        <div class="quantity-controls">
-
-          <button onclick="decreaseQty(${index})">−</button>
-
-          <span>${item.quantity}</span>
-
-          <button onclick="increaseQty(${index})">+</button>
-
-        </div>
-
-        <button class="remove-btn"
-                onclick="removeItem(${index})">
-
-          Remove
-
-        </button>
-
-      </div>
-
-    `;
-
-  });
-
-
-  /* DELIVERY FEE */
-
-  let deliveryFee = subtotal >= 499 ? 0 : 30;
-
-
-  /* PLATFORM FEE */
-
-  let platformFee = 5;
-
-
-  /* DISCOUNT */
-
-  let discount = 0;
-
-  if (appliedCoupon === "SAVE50" && subtotal >= 300) {
-
-    discount = 50;
-
-  }
-
-  else if (appliedCoupon === "WELCOME10" && subtotal >= 200) {
-
-    discount = Math.round(subtotal * 0.10);
-
-  }
-
-  else if (appliedCoupon) {
-
-    appliedCoupon = "";
-
-    localStorage.removeItem("sanjeevCoupon");
-
-  }
-
-
-  /* TOTAL */
-
-  let grandTotal =
-    subtotal + deliveryFee + platformFee - discount;
-
-
-  document.getElementById("subtotal").innerText =
-    "₹" + subtotal;
-
-  document.getElementById("deliveryFee").innerText =
-    deliveryFee === 0 ? "FREE" : "₹" + deliveryFee;
-
-  document.getElementById("platformFee").innerText =
-    "₹" + platformFee;
-
-  document.getElementById("discount").innerText =
-    "₹" + discount;
-
-  document.getElementById("grandTotal").innerText =
-    "₹" + grandTotal;
+  document.getElementById("total").textContent = total;
 
 }
-
 
 /* CHECKOUT */
 
@@ -1179,7 +851,6 @@ function checkout() {
 
   if (!name || !name.trim()) return;
 
-
   const phone = prompt("Enter your 10-digit mobile number:");
 
   if (!phone || !/^[6-9]\d{9}$/.test(phone.trim())) {
@@ -1190,43 +861,13 @@ function checkout() {
 
   }
 
-
   const address = prompt("Enter your delivery address:");
 
   if (!address || !address.trim()) return;
 
-
-  const subtotal = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
+  const total = cart.reduce(
+    (sum, food) => sum + food.price, 0
   );
-
-  const deliveryFee = subtotal >= 499 ? 0 : 30;
-
-  const platformFee = 5;
-
-  let discount = 0;
-
-  if (appliedCoupon === "SAVE50" && subtotal >= 300) {
-
-    discount = 50;
-
-  }
-
-  else if (appliedCoupon === "WELCOME10" && subtotal >= 200) {
-
-    discount = Math.round(subtotal * 0.10);
-
-  }
-
-
-  const total = subtotal + deliveryFee + platformFee - discount;
-
-
-  const orderDetails = cart.map(item =>
-    `${item.name} × ${item.quantity} = ₹${item.price * item.quantity}`
-  ).join("\n");
-
 
   const confirmed = confirm(
 
@@ -1238,46 +879,17 @@ function checkout() {
 
     "\nAddress: " + address +
 
-    "\n\n" + orderDetails +
-
-    "\n\nSubtotal: ₹" + subtotal +
-
-    "\nDelivery: ₹" + deliveryFee +
-
-    "\nPlatform Fee: ₹" + platformFee +
-
-    "\nDiscount: ₹" + discount +
-
-    "\nTotal: ₹" + total +
+    "\nTotal: Rs." + total +
 
     "\n\nConfirm order?"
 
   );
 
-
   if (confirmed) {
 
-    const orderID = "SJ" + Date.now();
-
-    alert(
-
-      "Order placed successfully!\n\n" +
-
-      "Order ID: " + orderID +
-
-      "\nTotal: ₹" + total +
-
-      "\n\nThank you " + name + "!"
-
-    );
+    alert("Thank you " + name + "! Demo order confirmed.");
 
     cart = [];
-
-    appliedCoupon = "";
-
-    localStorage.removeItem("sanjeevCoupon");
-
-    saveCart();
 
     updateCart();
 
@@ -1285,16 +897,11 @@ function checkout() {
 
 }
 
-
-/* INITIALIZE */
-
 showFoods();
-
-updateCart();
 
 </script>
 
-<!-- LOGIN / SIGNUP -->
+<!-- LOGIN AND SIGNUP FORM CONTROL -->
 
 <script>
 
@@ -1304,4 +911,420 @@ function openForm(type) {
 
   document.getElementById("signupForm").style.display = "none";
 
-  i
+  if (type === "login") {
+
+    document.getElementById("loginForm").style.display = "block";
+
+  } else {
+
+    document.getElementById("signupForm").style.display = "block";
+
+  }
+
+}
+
+function closeForm() {
+
+  document.getElementById("loginForm").style.display = "none";
+
+  document.getElementById("signupForm").style.display = "none";
+
+}
+
+</script>
+
+<!-- PROFILE DROPDOWN -->
+
+<script>
+
+function toggleProfileMenu() {
+
+  document.getElementById("profileDropdown")
+    .classList.toggle("show");
+
+}
+
+/* CLOSE MENU WHEN CLICKING OUTSIDE */
+
+document.addEventListener("click", function(event) {
+
+  const container = document.querySelector(".profile-container");
+
+  if (container && !container.contains(event.target)) {
+
+    document.getElementById("profileDropdown")
+      .classList.remove("show");
+
+  }
+
+});
+
+/* PROFILE MENU OPTIONS */
+
+function showProfile() {
+
+  alert("My Profile");
+
+}
+
+function showOrders() {
+
+  alert("My Orders");
+
+}
+
+function showAddresses() {
+
+  alert("Saved Addresses");
+
+}
+
+function showFavorites() {
+
+  alert("My Favorites");
+
+}
+
+function showSettings() {
+
+  alert("Settings");
+
+}
+
+</script>
+
+<!-- ORDER TRACKING -->
+
+<script>
+
+function trackOrder() {
+
+  const id = document
+    .getElementById("orderId")
+    .value.trim();
+
+  if (!id) {
+
+    alert("Please enter your Order ID");
+
+    return;
+
+  }
+
+  const result = document.getElementById("trackingResult");
+
+  result.innerHTML = `
+
+    <h3>Order: ${id.replace(/[<>&"]/g, "")}</h3>
+
+    <p>✅ Order Placed</p>
+
+    <p>✅ Food Preparing</p>
+
+    <p>🛵 Out for Delivery</p>
+
+    <p>⏳ Delivered</p>
+
+    <h3 style="color:#e23744;">
+      Your food is on the way!
+    </h3>
+
+  `;
+
+}
+
+</script>
+
+<!-- FIREBASE AUTHENTICATION -->
+
+<script type="module">
+
+import { initializeApp }
+
+from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+
+import {
+
+  getAuth,
+
+  createUserWithEmailAndPassword,
+
+  signInWithEmailAndPassword,
+
+  updateProfile,
+
+  onAuthStateChanged,
+
+  signOut
+
+}
+
+from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
+
+/* FIREBASE CONFIGURATION */
+
+const firebaseConfig = {
+
+  apiKey: "AIzaSyDhXSgQr-f6is4IIDmP7uljj1bg9okurBU",
+
+  authDomain: "sanjeev-food-delivery.firebaseapp.com",
+
+  projectId: "sanjeev-food-delivery",
+
+  storageBucket: "sanjeev-food-delivery.firebasestorage.app",
+
+  messagingSenderId: "580683471077",
+
+  appId: "1:580683471077:web:6372c35fff3b75fc56dc0c"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+/* SIGNUP */
+
+document.getElementById("signupBtn")
+  .addEventListener("click", async () => {
+
+    const name = document
+      .getElementById("signupName")
+      .value.trim();
+
+    const email = document
+      .getElementById("signupEmail")
+      .value.trim();
+
+    const password = document
+      .getElementById("signupPassword")
+      .value;
+
+    if (!name || !email || !password) {
+
+      alert("Please fill all fields.");
+
+      return;
+
+    }
+
+    if (password.length < 6) {
+
+      alert("Password must be at least 6 characters.");
+
+      return;
+
+    }
+
+    try {
+
+      const userCredential =
+        await createUserWithEmailAndPassword(
+          auth, email, password
+        );
+
+      await updateProfile(userCredential.user, {
+
+        displayName: name
+
+      });
+
+      alert("Account created successfully!");
+
+      closeForm();
+
+    } catch (error) {
+
+      alert("Signup Error: " + error.message);
+
+    }
+
+  });
+
+/* LOGIN */
+
+document.getElementById("loginBtn")
+  .addEventListener("click", async () => {
+
+    const email = document
+      .getElementById("loginEmail")
+      .value.trim();
+
+    const password = document
+      .getElementById("loginPassword")
+      .value;
+
+    if (!email || !password) {
+
+      alert("Please enter email and password.");
+
+      return;
+
+    }
+
+    try {
+
+      await signInWithEmailAndPassword(
+        auth, email, password
+      );
+
+      alert("Login successful!");
+
+      closeForm();
+
+    } catch (error) {
+
+      alert("Login Error: " + error.message);
+
+    }
+
+  });
+
+/* NORMAL LOGOUT */
+
+document.getElementById("dropdownLogout")
+  .addEventListener("click", async () => {
+
+    try {
+
+      await signOut(auth);
+
+      document.getElementById("profileDropdown")
+        .classList.remove("show");
+
+      alert("Logged out successfully!");
+
+    } catch (error) {
+
+      alert("Logout Error: " + error.message);
+
+    }
+
+  });
+
+/* AUTH STATUS */
+
+onAuthStateChanged(auth, (user) => {
+
+  const profileBar =
+    document.getElementById("profileBar");
+
+  const profileName =
+    document.getElementById("profileName");
+
+  const profileEmail =
+    document.getElementById("profileEmail");
+
+  const authButtons =
+    document.getElementById("authButtons");
+
+  const dropdown =
+    document.getElementById("profileDropdown");
+
+  const welcome =
+    document.getElementById("userWelcome");
+
+  if (user) {
+
+    profileBar.style.display = "flex";
+
+    profileName.textContent =
+      user.displayName || "User";
+
+    profileEmail.textContent =
+      user.email || "";
+
+    authButtons.style.display = "none";
+
+    welcome.textContent =
+      "Welcome, " + (user.displayName || user.email) + "!";
+
+  } else {
+
+    profileBar.style.display = "none";
+
+    authButtons.style.display = "block";
+
+    dropdown.classList.remove("show");
+
+    welcome.textContent = "";
+
+  }
+
+});
+
+</script>
+
+<!-- DARK MODE -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function() {
+
+  const themeButton =
+    document.getElementById("themeToggle");
+
+  if (!themeButton) return;
+
+  function applyTheme(isDark) {
+
+    if (isDark) {
+
+      document.body.classList.add("dark-mode");
+
+      themeButton.innerHTML = "☀️ Light Mode";
+
+      localStorage.setItem("theme", "dark");
+
+    } else {
+
+      document.body.classList.remove("dark-mode");
+
+      themeButton.innerHTML = "🌙 Dark Mode";
+
+      localStorage.setItem("theme", "light");
+
+    }
+
+  }
+
+  applyTheme(localStorage.getItem("theme") === "dark");
+
+  themeButton.addEventListener("click", function() {
+
+    const isDark =
+      document.body.classList.contains("dark-mode");
+
+    applyTheme(!isDark);
+
+  });
+
+});
+
+</script>
+
+<!-- LOCATION -->
+
+<script>
+
+async function getLocation() {
+
+  const locationText =
+    document.getElementById("locationText");
+
+  locationText.textContent = "Finding location...";
+
+  if (!navigator.geolocation) {
+
+    locationText.textContent =
+      "Geolocation is not supported by your browser.";
+
+    return;
+
+  }
+
+  navigator.geolocation.getCurrentPosition(
+
+    async function(position) {
+
+      const lat = pos
