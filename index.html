@@ -393,5 +393,45 @@ function closeForm() {
     document.getElementById("signupForm").style.display = "none";
 }
 </script>
+  <section style="background:white; padding:25px; margin:20px; border-radius:15px;">
+
+    <h2 style="color:#e23744; text-align:center;">
+        Track Your Order 🚚
+    </h2>
+
+    <input type="text" id="orderId"
+    placeholder="Enter Order ID"
+    style="width:100%; padding:12px; margin:10px 0;">
+
+    <button onclick="trackOrder()"
+    style="width:100%; padding:12px; background:#e23744; color:white; border:none; border-radius:8px;">
+        Track Order
+    </button>
+
+    <div id="trackingResult" style="margin-top:20px;"></div>
+
+</section>
+
+<script>
+function trackOrder() {
+    var id = document.getElementById("orderId").value;
+
+    if (id === "") {
+        alert("Please enter your Order ID");
+        return;
+    }
+
+    document.getElementById("trackingResult").innerHTML = `
+        <h3>Order: ${id}</h3>
+        <p>✅ Order Placed</p>
+        <p>✅ Food Preparing</p>
+        <p>🛵 Out for Delivery</p>
+        <p>⏳ Delivered</p>
+        <h3 style="color:#e23744;">
+            Your food is on the way!
+        </h3>
+    `;
+}
+</script>
 </body>
 </html>
