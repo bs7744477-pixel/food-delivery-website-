@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SANJEEV - Food Delivery</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #f7f7f7;
+  color: #222;
+}
+
+header {
+  background: #e23744;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 30px;
+}
+
+header p {
+  margin-top: 6px;
+}
+
+.search {
+  padding: 20px;
+  text-align: center;
+}
+
+.search input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.categories {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 10px 15px;
+}
+
+.categories button {
+  padding: 11px 17px;
+  border: none;
+  border-radius: 20px;
+  background: white;
+  white-space: nowrap;
+}
+
+.categories button.active {
+  background: #e23744;
+  color: white;
+}
+
+h2 {
+  margin: 20px;
+}
+
+.food-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  padding: 15px;
+}
+
+.food {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px #ddd;
+}
+
+.food img {
+  width: 100%;
+  height: 125px;
+  object-fit: cover;
+}
+
+.food-info {
+  padding: 12px;
+}
+
+.food h3 {
+  font-size: 16px;
+}
+
+.food p {
+  color: #666;
+  margin: 8px 0;
+  font-size: 13px;
+}
+
+.price {
+  color: #e23744;
+  font-weight: bold;
+}
+
+.food button, .checkout {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: #e23744;
+  color: white;
+  border-radius: 7px;
+  margin-top: 10px;
+}
+
+.cart {
+  background: white;
+  margin: 15px;
+  padding: 18px;
+  border-radius: 12px;
+}
+
+.cart p {
+  margin: 10px 0;
+}
+
+footer {
+  background: #222;
+  color: white;
+  text-align: center;
+  padding: 25px;
+  margin-top: 30px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>SANJEEV</h1>
+  <p>Delicious Food, Delivered To You!</p>
+</header>
+
+<section class="search">
+  <input id="search" type="text"
+  placeholder="Search your favourite food..."
+  oninput="showFoods()">
+</section>
+
+<div class="categories">
+  <button class="active" onclick="filterFood('All',this)">All</button>
+  <button onclick="filterFood('Biryani',this)">Biryani</button>
+  <button onclick="filterFood('Pizza',this)">Pizza</button>
+  <button onclick="filterFood('Burger',this)">Burger</button>
+  <button onclick="filterFood('Dosa',this)">Dosa</button>
+</div>
+
+<h2>Popular Food</h2>
+
+<div class="food-list" id="foodList"></div>
+
+<section class="cart">
+  <h2>🛒 Your Cart</h2>
+  <div id="cartItems">Your cart is empty.</div>
+  <p>Total: ₹<span id="total">0</span></p>
+  <button class="checkout" onclick="checkout()">
+    Place Order
+  </button>
+</section>
+
+<footer>
+  <h3>SANJEEV</h3>
+  <p>Food Delivery Website</p>
+  <p>© 2026 SANJEEV. All rights reserved.</p>
+</footer>
+
+<script>
+const foods = [
+  {
+    name: "Chicken Biryani",
+    category: "Biryani",
+    price: 160,
+    image: "https://images.unsplash.com/photo-1563379091339-03246963d96c?w=500"
+  },
+  {
+    name: "Veg Biryani",
+    category: "Biryani",
+    price: 120,
+    image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=500"
+  },
+  {
+    name: "Cheese Pizza",
+    category: "Pizza",
+    price: 199,
+    image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500"
+  },
+  {
+    name: "Burger",
+    category: "Burger",
+    price: 99,
+    image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500"
+  },
+  {
+    name: "Masala Dosa",
+    category: "Dosa",
+    price: 70,
+    image: "https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=500"
+  },
+  {
+    name: "Paneer Pizza",
+    category: "Pizza",
+    price: 179,
+    image: "https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=500"
+  }
+];
+
+let selected = "All";
+let cart = [];
+
+function showFoods() {
+  const search = document.getElementById("search")
+    .value.toLowerCase();
+
+  const filtered = foods.filter(food =>
+    (selected === "All" || food.category === selected) &&
+    food.name.toLowerCase().includes(search)
+  );
+
+  document.getElementById("foodList").innerHTML =
+    filtered.map(food => `
+      <div class="food">
+        <img src="${food.image}" alt="${food.name}">
+        <div class="food-info">
+          <h3>${food.name}</h3>
+          <p>${food.category}</p>
+          <div class="price">₹${food.price}</div>
+          <button onclick="addCart('${food.name}')">
+            Add to Cart +
+          </button>
+        </div>
+      </div>
+    `).join("") || "<p>No food found.</p>";
+}
+
+function filterFood(category, button) {
+  selected = category;
+
+  document.querySelectorAll(".categories button")
+    .forEach(btn => btn.classList.remove("active"));
+
+  button.classList.add("active");
+  showFoods();
+}
+
+function addCart(name) {
+  cart.push(foods.find(food => food.name === name));
+  updateCart();
+}
+
+function updateCart() {
+  let total = 0;
+
+  document.getElementById("cartItems").innerHTML =
+    cart.length
+      ? cart.map(food => {
+          total += food.price;
+          return `<p>${food.name} - ₹${food.price}</p>`;
+        }).join("")
+      : "Your cart is empty.";
+
+  document.getElementById("total").textContent = total;
+}
+
+function checkout() {
+  if (!cart.length) {
+    alert("Please add food to your cart first!");
+    return;
+  }
+
+  alert("Your order is ready! Online ordering will be added in the next version.");
+}
+
+showFoods();
+</script>
+
+</body>
+</html>
