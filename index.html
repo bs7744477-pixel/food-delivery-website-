@@ -618,17 +618,7 @@ onAuthStateChanged(auth, (user) => {
     }
 
 });
-    document.getElementById("logoutButton").onclick = async function() {
-    try {
-        await signOut(auth);
-        alert("Logout successful!");
-    } catch (error) {
-        alert("Logout failed: " + error.message);
-    }
-};
     
-
-  </script>
   <script>
 document.addEventListener("DOMContentLoaded", function() {
 
