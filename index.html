@@ -433,37 +433,48 @@ function trackOrder() {
 }
 </script>
   <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
 
 import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    updateProfile,
+    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "sanjeev-food-delivery-532cd.firebaseapp.com",
-  projectId: "sanjeev-food-delivery-532cd",
-  storageBucket: "sanjeev-food-delivery-532cd.firebasestorage.app",
-  messagingSenderId: "136113489667",
-  appId: "1:136113489667:web:ecb6893af4871f13b00b36"
+    apiKey: "AIzaSyDhXSgQr-f6is4IIDmP7uljj1bg9okurBU",
+    authDomain: "sanjeev-food-delivery.firebaseapp.com",
+    projectId: "sanjeev-food-delivery",
+    storageBucket: "sanjeev-food-delivery.firebasestorage.app",
+    messagingSenderId: "580683471077",
+    appId: "1:580683471077:web:6372c35fff3b75fc56dc0c"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-    document.getElementById("signupBtn").addEventListener("click", async () => {
 
+// Signup
+document.getElementById("signupBtn").addEventListener("click", async () => {
+
+    const name = document.getElementById("signupName").value;
     const email = document.getElementById("signupEmail").value;
     const password = document.getElementById("signupPassword").value;
 
     try {
-        await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(
+            auth, email, password
+        );
+
+        await updateProfile(userCredential.user, {
+            displayName: name
+        });
 
         alert("Account created successfully!");
-        closeForm();
+        window.closeForm();
 
     } catch (error) {
         alert(error.message);
@@ -471,13 +482,15 @@ const auth = getAuth(app);
 
 });
 
+// Authentication status
 onAuthStateChanged(auth, (user) => {
-  if (user) {
-    console.log("Logged in:", user.email);
-  } else {
-    console.log("Not logged in");
-  }
+    if (user) {
+        console.log("Logged in:", user.email);
+    } else {
+        console.log("Not logged in");
+    }
 });
+
   </script>
 </body>
 </html>
