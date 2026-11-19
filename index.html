@@ -375,6 +375,8 @@ h2 {
   max-width: 350px;
   box-shadow: 0 0 20px #999;
   z-index: 1000;
+  max-height: 85vh;
+  overflow-y: auto;
 }
 
 .modal h2 {
@@ -404,6 +406,33 @@ h2 {
 .closeButton {
   background: #ddd;
   color: black;
+}
+
+/* PROFILE AND SETTINGS */
+
+#profileModal p {
+  margin: 15px 0;
+  word-break: break-word;
+}
+
+#settingsModal button {
+  margin-top: 10px;
+}
+
+body.dark-mode #profileModal,
+body.dark-mode #settingsModal {
+  background: #222;
+  color: white;
+}
+
+body.dark-mode #profileModal h2,
+body.dark-mode #settingsModal h2 {
+  color: #e23744;
+}
+
+body.dark-mode .closeButton {
+  background: #444;
+  color: white;
 }
 
 /* FOOTER */
@@ -645,6 +674,55 @@ footer {
 
   <button onclick="closeForm()" class="closeButton">
     Cancel
+  </button>
+
+</div>
+
+<!-- MY PROFILE -->
+
+<div id="profileModal" class="modal">
+
+  <h2>👤 My Profile</h2>
+
+  <p><strong>Name:</strong></p>
+  <p id="myProfileName">Loading...</p>
+
+  <p><strong>Email:</strong></p>
+  <p id="myProfileEmail">Loading...</p>
+
+  <p><strong>Mobile:</strong></p>
+  <p id="myProfilePhone">Not added</p>
+
+  <button class="formButton" onclick="editProfilePhone()">
+    📱 Edit Mobile Number
+  </button>
+
+  <button class="closeButton" onclick="closeProfile()">
+    Close
+  </button>
+
+</div>
+
+<!-- SETTINGS -->
+
+<div id="settingsModal" class="modal">
+
+  <h2>⚙️ Settings</h2>
+
+  <button class="formButton" onclick="toggleSettingsTheme()">
+    🌙 Change Theme
+  </button>
+
+  <button class="formButton" onclick="showAccountInfo()">
+    🔐 Account Information
+  </button>
+
+  <button class="formButton" onclick="clearSavedCart()">
+    🛒 Clear Cart
+  </button>
+
+  <button class="closeButton" onclick="closeSettings()">
+    Close
   </button>
 
 </div>
@@ -963,31 +1041,122 @@ document.addEventListener("click", function(event) {
 
 function showProfile() {
 
-  alert("My Profile");
+  document.getElementById("profileModal").style.display = "block";
+
+  document.getElementById("profileDropdown")
+    .classList.remove("show");
+
+}
+
+function closeProfile() {
+
+  document.getElementById("profileModal").style.display = "none";
 
 }
 
 function showOrders() {
 
-  alert("My Orders");
+  alert("My Orders: No orders available.");
 
 }
 
 function showAddresses() {
 
-  alert("Saved Addresses");
+  const address = localStorage.getItem("savedAddress");
+
+  alert(address ? "Saved Address:\n" + address : "No saved addresses.");
 
 }
 
 function showFavorites() {
 
-  alert("My Favorites");
+  alert("Favorites: You haven't saved any favorites yet.");
 
 }
 
 function showSettings() {
 
-  alert("Settings");
+  document.getElementById("settingsModal").style.display = "block";
+
+  document.getElementById("profileDropdown")
+    .classList.remove("show");
+
+}
+
+function closeSettings() {
+
+  document.getElementById("settingsModal").style.display = "none";
+
+}
+
+/* EDIT MOBILE NUMBER */
+
+function editProfilePhone() {
+
+  const email = document.getElementById("myProfileEmail").textContent;
+
+  const phoneKey = "sanjeevPhone_" + email;
+
+  const oldPhone = localStorage.getItem(phoneKey) || "";
+
+  const phone = prompt("Enter your 10-digit mobile number:", oldPhone);
+
+  if (phone === null) return;
+
+  if (!/^[6-9]\d{9}$/.test(phone.trim())) {
+
+    alert("Please enter a valid 10-digit mobile number.");
+
+    return;
+
+  }
+
+  localStorage.setItem(phoneKey, phone.trim());
+
+  document.getElementById("myProfilePhone").textContent = phone.trim();
+
+  alert("Mobile number updated successfully!");
+
+}
+
+/* SETTINGS THEME */
+
+function toggleSettingsTheme() {
+
+  document.getElementById("themeToggle").click();
+
+}
+
+/* ACCOUNT INFORMATION */
+
+function showAccountInfo() {
+
+  const name = document.getElementById("myProfileName").textContent;
+
+  const email = document.getElementById("myProfileEmail").textContent;
+
+  alert(
+    "ACCOUNT INFORMATION\n\n" +
+    "Name: " + name +
+    "\nEmail: " + email +
+    "\nAuthentication: Firebase"
+  );
+
+}
+
+/* CLEAR CART */
+
+function clearSavedCart() {
+
+  if (confirm("Are you sure you want to clear your cart?")) {
+
+    cart = [];
+
+    updateCart();
+
+    alert("Your cart has been cleared!");
+
+  }
 
 }
 
@@ -1129,202 +1298,4 @@ document.getElementById("signupBtn")
 
       });
 
-      alert("Account created successfully!");
-
-      closeForm();
-
-    } catch (error) {
-
-      alert("Signup Error: " + error.message);
-
-    }
-
-  });
-
-/* LOGIN */
-
-document.getElementById("loginBtn")
-  .addEventListener("click", async () => {
-
-    const email = document
-      .getElementById("loginEmail")
-      .value.trim();
-
-    const password = document
-      .getElementById("loginPassword")
-      .value;
-
-    if (!email || !password) {
-
-      alert("Please enter email and password.");
-
-      return;
-
-    }
-
-    try {
-
-      await signInWithEmailAndPassword(
-        auth, email, password
-      );
-
-      alert("Login successful!");
-
-      closeForm();
-
-    } catch (error) {
-
-      alert("Login Error: " + error.message);
-
-    }
-
-  });
-
-/* NORMAL LOGOUT */
-
-document.getElementById("dropdownLogout")
-  .addEventListener("click", async () => {
-
-    try {
-
-      await signOut(auth);
-
-      document.getElementById("profileDropdown")
-        .classList.remove("show");
-
-      alert("Logged out successfully!");
-
-    } catch (error) {
-
-      alert("Logout Error: " + error.message);
-
-    }
-
-  });
-
-/* AUTH STATUS */
-
-onAuthStateChanged(auth, (user) => {
-
-  const profileBar =
-    document.getElementById("profileBar");
-
-  const profileName =
-    document.getElementById("profileName");
-
-  const profileEmail =
-    document.getElementById("profileEmail");
-
-  const authButtons =
-    document.getElementById("authButtons");
-
-  const dropdown =
-    document.getElementById("profileDropdown");
-
-  const welcome =
-    document.getElementById("userWelcome");
-
-  if (user) {
-
-    profileBar.style.display = "flex";
-
-    profileName.textContent =
-      user.displayName || "User";
-
-    profileEmail.textContent =
-      user.email || "";
-
-    authButtons.style.display = "none";
-
-    welcome.textContent =
-      "Welcome, " + (user.displayName || user.email) + "!";
-
-  } else {
-
-    profileBar.style.display = "none";
-
-    authButtons.style.display = "block";
-
-    dropdown.classList.remove("show");
-
-    welcome.textContent = "";
-
-  }
-
-});
-
-</script>
-
-<!-- DARK MODE -->
-
-<script>
-
-document.addEventListener("DOMContentLoaded", function() {
-
-  const themeButton =
-    document.getElementById("themeToggle");
-
-  if (!themeButton) return;
-
-  function applyTheme(isDark) {
-
-    if (isDark) {
-
-      document.body.classList.add("dark-mode");
-
-      themeButton.innerHTML = "☀️ Light Mode";
-
-      localStorage.setItem("theme", "dark");
-
-    } else {
-
-      document.body.classList.remove("dark-mode");
-
-      themeButton.innerHTML = "🌙 Dark Mode";
-
-      localStorage.setItem("theme", "light");
-
-    }
-
-  }
-
-  applyTheme(localStorage.getItem("theme") === "dark");
-
-  themeButton.addEventListener("click", function() {
-
-    const isDark =
-      document.body.classList.contains("dark-mode");
-
-    applyTheme(!isDark);
-
-  });
-
-});
-
-</script>
-
-<!-- LOCATION -->
-
-<script>
-
-async function getLocation() {
-
-  const locationText =
-    document.getElementById("locationText");
-
-  locationText.textContent = "Finding location...";
-
-  if (!navigator.geolocation) {
-
-    locationText.textContent =
-      "Geolocation is not supported by your browser.";
-
-    return;
-
-  }
-
-  navigator.geolocation.getCurrentPosition(
-
-    async function(position) {
-
-      const lat = pos
+      
