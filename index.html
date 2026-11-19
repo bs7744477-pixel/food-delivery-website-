@@ -482,7 +482,22 @@ document.getElementById("signupBtn").addEventListener("click", async () => {
     }
 
 });
+// Login
+document.getElementById("loginBtn").addEventListener("click", async () => {
 
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+        alert("Login successful!");
+        window.closeForm();
+
+    } catch (error) {
+        alert(error.message);
+    }
+
+});
 // Authentication status
 onAuthStateChanged(auth, (user) => {
     if (user) {
