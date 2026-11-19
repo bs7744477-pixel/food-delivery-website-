@@ -278,14 +278,45 @@ function updateCart() {
   document.getElementById("total").textContent = total;
 }
 
+
 function checkout() {
   if (!cart.length) {
     alert("Please add food to your cart first!");
     return;
   }
 
-  alert("Your order is ready! Online ordering will be added in the next version.");
+  const name = prompt("Enter your full name:");
+  if (!name || !name.trim()) return;
+
+  const phone = prompt("Enter your 10-digit mobile number:");
+  if (!phone || !/^[6-9]\d{9}$/.test(phone.trim())) {
+    alert("Enter a valid mobile number.");
+    return;
+  }
+
+  const address = prompt("Enter your delivery address:");
+  if (!address || !address.trim()) return;
+
+  const total = cart.reduce(
+    (sum, food) => sum + food.price, 0
+  );
+
+  const confirmed = confirm(
+    "SANJEEV ORDER\n\n" +
+    "Name: " + name +
+    "\nPhone: " + phone +
+    "\nAddress: " + address +
+    "\nTotal: Rs." + total +
+    "\n\nConfirm order?"
+  );
+
+  if (confirmed) {
+    alert("Thank you " + name + "! Demo order confirmed.");
+    cart = [];
+    updateCart();
+  }
 }
+  
 
 showFoods();
 </script>
