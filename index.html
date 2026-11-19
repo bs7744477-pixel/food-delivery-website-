@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GANESAN - Food Delivery</title>
+<title>SANJEEV - Food Delivery</title>
 
 <style>
 
@@ -1053,6 +1053,8 @@ import {
 
   updateProfile,
 
+  sendEmailVerification,
+
   onAuthStateChanged,
 
   signOut
@@ -1083,7 +1085,7 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 
-/* SIGNUP */
+/* SIGNUP WITH EMAIL VERIFICATION */
 
 document.getElementById("signupBtn")
   .addEventListener("click", async () => {
@@ -1123,15 +1125,29 @@ document.getElementById("signupBtn")
           auth, email, password
         );
 
-      await updateProfile(userCredential.user, {
+      const user = userCredential.user;
+
+      await updateProfile(user, {
 
         displayName: name
 
       });
 
-      alert("Account created successfully!");
+      /* SEND VERIFICATION EMAIL */
+
+      await sendEmailVerification(user);
+
+      /* SIGN OUT UNTIL VERIFIED */
+
+      await signOut(auth);
 
       closeForm();
+
+      alert(
+        "Account created successfully!\n\n" +
+        "A verification email has been sent to " + email +
+        "\n\nPlease open your email and click the verification link before logging in."
+      );
 
     } catch (error) {
 
@@ -1141,7 +1157,7 @@ document.getElementById("signupBtn")
 
   });
 
-/* LOGIN */
+/* LOGIN WITH EMAIL VERIFICATION */
 
 document.getElementById("loginBtn")
   .addEventListener("click", async () => {
@@ -1164,9 +1180,30 @@ document.getElementById("loginBtn")
 
     try {
 
-      await signInWithEmailAndPassword(
-        auth, email, password
-      );
+      const userCredential =
+        await signInWithEmailAndPassword(
+          auth, email, password
+        );
+
+      const user = userCredential.user;
+
+      /* CHECK EMAIL VERIFICATION */
+
+      if (!user.emailVerified) {
+
+        await sendEmailVerification(user);
+
+        await signOut(auth);
+
+        alert(
+          "Your email is not verified!\n\n" +
+          "A new verification email has been sent to " + email +
+          "\n\nPlease verify your email before logging in."
+        );
+
+        return;
+
+      }
 
       alert("Login successful!");
 
@@ -1180,7 +1217,7 @@ document.getElementById("loginBtn")
 
   });
 
-/* NORMAL LOGOUT */
+/* LOGOUT */
 
 document.getElementById("dropdownLogout")
   .addEventListener("click", async () => {
@@ -1204,7 +1241,7 @@ document.getElementById("dropdownLogout")
 
 /* AUTH STATUS */
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
 
   const profileBar =
     document.getElementById("profileBar");
@@ -1223,6 +1260,16 @@ onAuthStateChanged(auth, (user) => {
 
   const welcome =
     document.getElementById("userWelcome");
+
+  /* BLOCK UNVERIFIED USERS */
+
+  if (user && !user.emailVerified) {
+
+    await signOut(auth);
+
+    return;
+
+  }
 
   if (user) {
 
@@ -1268,348 +1315,4 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function applyTheme(isDark) {
 
-    if (isDark) {
-
-      document.body.classList.add("dark-mode");
-
-      themeButton.innerHTML = "☀️ Light Mode";
-
-      localStorage.setItem("theme", "dark");
-
-    } else {
-
-      document.body.classList.remove("dark-mode");
-
-      themeButton.innerHTML = "🌙 Dark Mode";
-
-      localStorage.setItem("theme", "light");
-
-    }
-
-  }
-
-  applyTheme(localStorage.getItem("theme") === "dark");
-
-  themeButton.addEventListener("click", function() {
-
-    const isDark =
-      document.body.classList.contains("dark-mode");
-
-    applyTheme(!isDark);
-
-  });
-
-});
-
-</script>
-
-<!-- LOCATION -->
-
-<script>
-
-async function getLocation() {
-
-  const locationText =
-    document.getElementById("locationText");
-
-  locationText.textContent = "Finding location...";
-
-  if (!navigator.geolocation) {
-
-    locationText.textContent =
-      "Geolocation is not supported by your browser.";
-
-    return;
-
-  }
-
-  navigator.geolocation.getCurrentPosition(
-
-    async function(position) {
-
-      const lat = pos
-<!-- FIREBASE AUTHENTICATION -->
-
-<script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
-
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  updateProfile,
-  sendEmailVerification,
-  onAuthStateChanged,
-  signOut
-}
-from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
-
-/* FIREBASE CONFIGURATION */
-
-const firebaseConfig = {
-
-  apiKey: "AIzaSyDhXSgQr-f6is4IIDmP7uljj1bg9okurBU",
-
-  authDomain: "sanjeev-food-delivery.firebaseapp.com",
-
-  projectId: "sanjeev-food-delivery",
-
-  storageBucket: "sanjeev-food-delivery.firebasestorage.app",
-
-  messagingSenderId: "580683471077",
-
-  appId: "1:580683471077:web:6372c35fff3b75fc56dc0c"
-
-};
-
-/* INITIALIZE FIREBASE */
-
-const app = initializeApp(firebaseConfig);
-
-const auth = getAuth(app);
-
-
-/* SIGNUP WITH EMAIL VERIFICATION */
-
-document.getElementById("signupBtn")
-.addEventListener("click", async () => {
-
-  const name = document
-    .getElementById("signupName")
-    .value.trim();
-
-  const email = document
-    .getElementById("signupEmail")
-    .value.trim();
-
-  const password = document
-    .getElementById("signupPassword")
-    .value;
-
-  if (!name || !email || !password) {
-
-    alert("Please fill all fields.");
-
-    return;
-
-  }
-
-  if (password.length < 6) {
-
-    alert("Password must be at least 6 characters.");
-
-    return;
-
-  }
-
-  try {
-
-    const userCredential =
-      await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-
-    const user = userCredential.user;
-
-    /* SAVE USER NAME */
-
-    await updateProfile(user, {
-
-      displayName: name
-
-    });
-
-    /* SEND VERIFICATION EMAIL */
-
-    await sendEmailVerification(user);
-
-    /* LOGOUT UNTIL VERIFIED */
-
-    await signOut(auth);
-
-    alert(
-      "Account created successfully!\n\n" +
-      "📧 Verification email sent to:\n" +
-      email +
-      "\n\nPlease open your email and click the verification link.\n" +
-      "After verification, you can login."
-    );
-
-    closeForm();
-
-  } catch (error) {
-
-    alert("Signup Error: " + error.message);
-
-  }
-
-});
-
-
-/* LOGIN WITH EMAIL VERIFICATION */
-
-document.getElementById("loginBtn")
-.addEventListener("click", async () => {
-
-  const email = document
-    .getElementById("loginEmail")
-    .value.trim();
-
-  const password = document
-    .getElementById("loginPassword")
-    .value;
-
-  if (!email || !password) {
-
-    alert("Please enter email and password.");
-
-    return;
-
-  }
-
-  try {
-
-    const userCredential =
-      await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-
-    const user = userCredential.user;
-
-    /* CHECK EMAIL VERIFICATION */
-
-    if (!user.emailVerified) {
-
-      await sendEmailVerification(user);
-
-      await signOut(auth);
-
-      alert(
-        "Your email is not verified!\n\n" +
-        "A new verification email has been sent to:\n" +
-        email +
-        "\n\nPlease verify your email before logging in."
-      );
-
-      return;
-
-    }
-
-    alert("Login successful!");
-
-    closeForm();
-
-  } catch (error) {
-
-    alert("Login Error: " + error.message);
-
-  }
-
-});
-
-
-/* NORMAL LOGOUT */
-
-document.getElementById("dropdownLogout")
-.addEventListener("click", async () => {
-
-  try {
-
-    await signOut(auth);
-
-    document.getElementById("profileDropdown")
-      .classList.remove("show");
-
-    alert("Logged out successfully!");
-
-  } catch (error) {
-
-    alert("Logout Error: " + error.message);
-
-  }
-
-});
-
-
-/* AUTH STATUS */
-
-onAuthStateChanged(auth, async (user) => {
-
-  const profileBar =
-    document.getElementById("profileBar");
-
-  const profileName =
-    document.getElementById("profileName");
-
-  const profileEmail =
-    document.getElementById("profileEmail");
-
-  const authButtons =
-    document.getElementById("authButtons");
-
-  const dropdown =
-    document.getElementById("profileDropdown");
-
-  const welcome =
-    document.getElementById("userWelcome");
-
-  if (user) {
-
-    /* BLOCK UNVERIFIED USERS */
-
-    if (!user.emailVerified) {
-
-      await signOut(auth);
-
-      profileBar.style.display = "none";
-
-      authButtons.style.display = "block";
-
-      dropdown.classList.remove("show");
-
-      welcome.textContent = "";
-
-      return;
-
-    }
-
-    /* VERIFIED USER */
-
-    profileBar.style.display = "flex";
-
-    profileName.textContent =
-      user.displayName || "User";
-
-    profileEmail.textContent =
-      user.email || "";
-
-    authButtons.style.display = "none";
-
-    welcome.textContent =
-      "Welcome, " +
-      (user.displayName || user.email) +
-      "!";
-
-  } else {
-
-    /* LOGGED OUT */
-
-    profileBar.style.display = "none";
-
-    authButtons.style.display = "block";
-
-    dropdown.classList.remove("show");
-
-    welcome.textContent = "";
-
-  }
-
-});
-
-</script>
+    if (isDark
