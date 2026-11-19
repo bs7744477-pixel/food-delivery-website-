@@ -433,5 +433,36 @@ function trackOrder() {
     `;
 }
 </script>
+  <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "sanjeev-food-delivery-532cd.firebaseapp.com",
+  projectId: "sanjeev-food-delivery-532cd",
+  storageBucket: "sanjeev-food-delivery-532cd.firebasestorage.app",
+  messagingSenderId: "136113489667",
+  appId: "1:136113489667:web:ecb6893af4871f13b00b36"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("Logged in:", user.email);
+  } else {
+    console.log("Not logged in");
+  }
+});
+  </script>
 </body>
 </html>
