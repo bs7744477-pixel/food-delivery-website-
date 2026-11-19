@@ -502,11 +502,15 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
 });
 // Authentication status
 onAuthStateChanged(auth, (user) => {
+
+    const welcome = document.getElementById("userWelcome");
+
     if (user) {
-        console.log("Logged in:", user.email);
+        welcome.textContent = "Welcome, " + (user.displayName || user.email) + "!";
     } else {
-        console.log("Not logged in");
+        welcome.textContent = "";
     }
+
 });
 
   </script>
