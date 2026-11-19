@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,7 +52,8 @@ body.dark-mode .categories,
 body.dark-mode .track-section,
 body.dark-mode .modal,
 body.dark-mode .profile-bar,
-body.dark-mode .profile-dropdown {
+body.dark-mode .profile-dropdown,
+body.dark-mode #selectedLocation {
   background: #222;
   color: white;
 }
@@ -75,12 +77,10 @@ body.dark-mode .categories button {
 
 body.dark-mode .categories button.active {
   background: #e23744;
-  color: white;
 }
 
 body.dark-mode footer {
   background: #000;
-  color: white;
 }
 
 body.dark-mode .food p {
@@ -103,7 +103,7 @@ body.dark-mode .cart-item {
   border-color: #555;
 }
 
-/* HEADER BUTTONS */
+/* HEADER */
 
 #themeToggle,
 #locationButton {
@@ -123,9 +123,82 @@ body.dark-mode .cart-item {
   color: #e23744;
 }
 
-#locationText {
-  margin: 10px;
+/* LOCATION */
+
+.location-container {
+  max-width: 600px;
+  margin: 15px auto;
+  padding: 10px;
+}
+
+.location-search {
+  position: relative;
+}
+
+.location-search input {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+#locationSuggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  color: #222;
+  border-radius: 10px;
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 3000;
+  box-shadow: 0 4px 15px #0003;
+}
+
+.location-suggestion {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+}
+
+.location-suggestion:hover {
+  background: #f2f2f2;
+}
+
+#selectedLocation {
+  margin-top: 12px;
+  padding: 12px;
+  background: white;
+  color: #222;
+  border-radius: 10px;
   word-wrap: break-word;
+}
+
+#selectedLocation button {
+  padding: 9px 12px;
+  background: #e23744;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  margin-top: 10px;
+}
+
+body.dark-mode #locationSuggestions {
+  background: #222;
+  color: white;
+}
+
+body.dark-mode .location-suggestion {
+  color: white;
+  border-color: #555;
+}
+
+body.dark-mode .location-suggestion:hover {
+  background: #333;
 }
 
 /* PROFILE */
@@ -176,7 +249,6 @@ body.dark-mode .cart-item {
 
 .dropdown-arrow {
   margin-left: 10px;
-  font-size: 12px;
 }
 
 .profile-dropdown {
@@ -203,7 +275,6 @@ body.dark-mode .cart-item {
   padding: 14px;
   border: none;
   background: transparent;
-  color: #222;
   text-align: left;
   font-size: 15px;
 }
@@ -323,7 +394,7 @@ h2 {
   margin-top: 10px;
 }
 
-/* ADVANCED CART */
+/* CART */
 
 .cart {
   background: white;
@@ -510,7 +581,6 @@ footer {
 /* MOBILE */
 
 @media (max-width: 400px) {
-
   .food-list {
     grid-template-columns: 1fr;
   }
@@ -522,7 +592,6 @@ footer {
   .cart-item {
     flex-wrap: wrap;
   }
-
 }
 </style>
 </head>
@@ -531,79 +600,98 @@ footer {
 
 <header>
 
-  <h1>SANJEEV</h1>
-  <p>Delicious Food, Delivered To You!</p>
+<h1>SANJEEV</h1>
+<p>Delicious Food, Delivered To You!</p>
 
-  <button id="themeToggle">
-    🌙 Dark Mode
-  </button>
+<button id="themeToggle">🌙 Dark Mode</button>
 
-  <button id="locationButton" onclick="getLocation()">
-    📍 My Location
-  </button>
+<!-- LOCATION -->
 
-  <p id="locationText"></p>
+<div class="location-container">
 
-  <!-- PROFILE -->
+<button id="locationButton" onclick="getLocation()">
+📍 Use Current Location
+</button>
 
-  <div class="profile-container">
+<div class="location-search">
 
-    <div id="profileBar"
-         class="profile-bar"
-         style="display:none;"
-         onclick="toggleProfileMenu()">
+<input
+type="text"
+id="locationSearch"
+placeholder="Search city, area or pincode..."
+oninput="searchLocation()">
 
-      <div class="profile-avatar">👤</div>
+<div id="locationSuggestions"></div>
 
-      <div class="profile-info">
+</div>
 
-        <span id="profileName">User</span>
+<div id="selectedLocation">
 
-        <small id="profileEmail">Email</small>
+<p>📍 <span id="locationText">No location selected</span></p>
 
-      </div>
+<button onclick="editAddress()">
+🏠 Add Delivery Address
+</button>
 
-      <span class="dropdown-arrow">▼</span>
+</div>
 
-    </div>
+</div>
 
-    <div id="profileDropdown" class="profile-dropdown">
+<!-- PROFILE -->
 
-      <button onclick="showProfile()">👤 My Profile</button>
-      <button onclick="showOrders()">📦 My Orders</button>
-      <button onclick="showAddresses()">📍 Saved Addresses</button>
-      <button onclick="showFavorites()">❤️ Favorites</button>
-      <button onclick="showSettings()">⚙️ Settings</button>
+<div class="profile-container">
 
-      <button id="dropdownLogout" class="logout-option">
-        🚪 Logout
-      </button>
+<div id="profileBar"
+class="profile-bar"
+style="display:none;"
+onclick="toggleProfileMenu()">
 
-    </div>
+<div class="profile-avatar">👤</div>
 
-    <div id="authButtons">
+<div class="profile-info">
 
-      <button id="loginButton"
-        onclick="openForm('login')"
-        style="background:white;color:#e23744;">
+<span id="profileName">User</span>
+<small id="profileEmail">Email</small>
 
-        Login
+</div>
 
-      </button>
+<span class="dropdown-arrow">▼</span>
 
-      <button id="signupButton"
-        onclick="openForm('signup')"
-        style="background:#222;color:white;">
+</div>
 
-        Signup
+<div id="profileDropdown" class="profile-dropdown">
 
-      </button>
+<button onclick="showProfile()">👤 My Profile</button>
+<button onclick="showOrders()">📦 My Orders</button>
+<button onclick="showAddresses()">📍 Saved Addresses</button>
+<button onclick="showFavorites()">❤️ Favorites</button>
+<button onclick="showSettings()">⚙️ Settings</button>
 
-    </div>
+<button id="dropdownLogout" class="logout-option">
+🚪 Logout
+</button>
 
-  </div>
+</div>
 
-  <p id="userWelcome" style="margin-top:10px;font-weight:bold;"></p>
+<div id="authButtons">
+
+<button id="loginButton"
+onclick="openForm('login')"
+style="background:white;color:#e23744;">
+Login
+</button>
+
+<button id="signupButton"
+onclick="openForm('signup')"
+style="background:#222;color:white;">
+Signup
+</button>
+
+</div>
+
+</div>
+
+<p id="userWelcome" style="margin-top:10px;font-weight:bold;"></p>
 
 </header>
 
@@ -611,11 +699,11 @@ footer {
 
 <section class="search">
 
-  <input
-    id="search"
-    type="text"
-    placeholder="Search your favourite food..."
-    oninput="showFoods()">
+<input
+id="search"
+type="text"
+placeholder="Search your favourite food..."
+oninput="showFoods()">
 
 </section>
 
@@ -623,11 +711,11 @@ footer {
 
 <div class="categories">
 
-  <button class="active" onclick="filterFood('All',this)">All</button>
-  <button onclick="filterFood('Biryani',this)">Biryani</button>
-  <button onclick="filterFood('Pizza',this)">Pizza</button>
-  <button onclick="filterFood('Burger',this)">Burger</button>
-  <button onclick="filterFood('Dosa',this)">Dosa</button>
+<button class="active" onclick="filterFood('All',this)">All</button>
+<button onclick="filterFood('Biryani',this)">Biryani</button>
+<button onclick="filterFood('Pizza',this)">Pizza</button>
+<button onclick="filterFood('Burger',this)">Burger</button>
+<button onclick="filterFood('Dosa',this)">Dosa</button>
 
 </div>
 
@@ -635,61 +723,46 @@ footer {
 
 <div class="food-list" id="foodList"></div>
 
-<!-- ADVANCED CART -->
+<!-- CART -->
 
 <section class="cart">
 
-  <h2>🛒 Your Cart</h2>
+<h2>🛒 Your Cart</h2>
 
-  <div id="cartItems"></div>
+<div id="cartItems"></div>
 
-  <div class="coupon-box">
+<div class="coupon-box">
 
-    <input
-      type="text"
-      id="couponInput"
-      placeholder="Enter coupon code">
+<input
+type="text"
+id="couponInput"
+placeholder="Enter coupon code">
 
-    <button onclick="applyCoupon()">Apply</button>
+<button onclick="applyCoupon()">Apply</button>
 
-  </div>
+</div>
 
-  <p id="couponMessage"></p>
+<p id="couponMessage"></p>
 
-  <div class="bill-details">
+<div class="bill-details">
 
-    <p>
-      Item Total:
-      <span id="subtotal">₹0</span>
-    </p>
+<p>Item Total: <span id="subtotal">₹0</span></p>
+<p>Delivery Fee: <span id="deliveryFee">₹0</span></p>
+<p>Platform Fee: <span id="platformFee">₹0</span></p>
+<p>Discount: <span id="discount">₹0</span></p>
 
-    <p>
-      Delivery Fee:
-      <span id="deliveryFee">₹0</span>
-    </p>
+<hr>
 
-    <p>
-      Platform Fee:
-      <span id="platformFee">₹0</span>
-    </p>
+<h3 style="display:flex;justify-content:space-between;margin-top:15px;">
+Grand Total:
+<span id="grandTotal">₹0</span>
+</h3>
 
-    <p>
-      Discount:
-      <span id="discount">₹0</span>
-    </p>
+</div>
 
-    <hr>
-
-    <h3 style="display:flex;justify-content:space-between;margin-top:15px;">
-      Grand Total:
-      <span id="grandTotal">₹0</span>
-    </h3>
-
-  </div>
-
-  <button class="checkout" onclick="checkout()">
-    Proceed to Checkout
-  </button>
+<button class="checkout" onclick="checkout()">
+Proceed to Checkout
+</button>
 
 </section>
 
@@ -697,15 +770,15 @@ footer {
 
 <div id="loginForm" class="modal">
 
-  <h2>Login</h2>
+<h2>Login</h2>
 
-  <input type="email" id="loginEmail" placeholder="Email">
+<input type="email" id="loginEmail" placeholder="Email">
 
-  <input type="password" id="loginPassword" placeholder="Password">
+<input type="password" id="loginPassword" placeholder="Password">
 
-  <button id="loginBtn" class="formButton">Login</button>
+<button id="loginBtn" class="formButton">Login</button>
 
-  <button onclick="closeForm()" class="closeButton">Close</button>
+<button onclick="closeForm()" class="closeButton">Close</button>
 
 </div>
 
@@ -713,45 +786,45 @@ footer {
 
 <div id="signupForm" class="modal">
 
-  <h2>Signup</h2>
+<h2>Signup</h2>
 
-  <input type="text" id="signupName" placeholder="Full Name">
+<input type="text" id="signupName" placeholder="Full Name">
 
-  <input type="email" id="signupEmail" placeholder="Email">
+<input type="email" id="signupEmail" placeholder="Email">
 
-  <input type="password" id="signupPassword" placeholder="Password">
+<input type="password" id="signupPassword" placeholder="Password">
 
-  <button id="signupBtn" class="formButton">Create Account</button>
+<button id="signupBtn" class="formButton">Create Account</button>
 
-  <button onclick="closeForm()" class="closeButton">Cancel</button>
+<button onclick="closeForm()" class="closeButton">Cancel</button>
 
 </div>
 
-<!-- ORDER TRACKING -->
+<!-- TRACKING -->
 
 <section class="track-section">
 
-  <h2 style="color:#e23744;text-align:center;">
-    Track Your Order 🚚
-  </h2>
+<h2 style="color:#e23744;text-align:center;">
+Track Your Order 🚚
+</h2>
 
-  <input type="text" id="orderId" placeholder="Enter Order ID">
+<input type="text" id="orderId" placeholder="Enter Order ID">
 
-  <button onclick="trackOrder()">Track Order</button>
+<button onclick="trackOrder()">Track Order</button>
 
-  <div id="trackingResult" style="margin-top:20px;"></div>
+<div id="trackingResult" style="margin-top:20px;"></div>
 
 </section>
 
 <footer>
 
-  <h3>SANJEEV</h3>
-
-  <p>Food Delivery Website</p>
-
-  <p>© 2026 SANJEEV. All rights reserved.</p>
+<h3>SANJEEV</h3>
+<p>Food Delivery Website</p>
+<p>© 2026 SANJEEV. All rights reserved.</p>
 
 </footer>
+
+<!-- WEBSITE JAVASCRIPT -->
 
 <script>
 
@@ -759,52 +832,52 @@ footer {
 
 const foods = [
 
-  {
-    name: "Chicken Biryani",
-    category: "Biryani",
-    price: 160,
-    image: "https://images.unsplash.com/photo-1563379091339-03246963d96c?w=500"
-  },
+{
+name: "Chicken Biryani",
+category: "Biryani",
+price: 160,
+image: "https://images.unsplash.com/photo-1563379091339-03246963d96c?w=500"
+},
 
-  {
-    name: "Veg Biryani",
-    category: "Biryani",
-    price: 120,
-    image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=500"
-  },
+{
+name: "Veg Biryani",
+category: "Biryani",
+price: 120,
+image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=500"
+},
 
-  {
-    name: "Cheese Pizza",
-    category: "Pizza",
-    price: 199,
-    image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500"
-  },
+{
+name: "Cheese Pizza",
+category: "Pizza",
+price: 199,
+image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500"
+},
 
-  {
-    name: "Burger",
-    category: "Burger",
-    price: 99,
-    image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500"
-  },
+{
+name: "Burger",
+category: "Burger",
+price: 99,
+image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500"
+},
 
-  {
-    name: "Masala Dosa",
-    category: "Dosa",
-    price: 70,
-    image: "https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=500"
-  },
+{
+name: "Masala Dosa",
+category: "Dosa",
+price: 70,
+image: "https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=500"
+},
 
-  {
-    name: "Paneer Pizza",
-    category: "Pizza",
-    price: 179,
-    image: "https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=500"
-  }
+{
+name: "Paneer Pizza",
+category: "Pizza",
+price: 179,
+image: "https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=500"
+}
 
 ];
 
 
-/* CART DATA */
+/* CART */
 
 let selected = "All";
 
@@ -813,352 +886,310 @@ let cart = JSON.parse(localStorage.getItem("sanjeevCart")) || [];
 let appliedCoupon = localStorage.getItem("sanjeevCoupon") || "";
 
 
-/* DISPLAY FOOD */
+/* FOOD DISPLAY */
 
 function showFoods() {
 
-  const search = document
-    .getElementById("search")
-    .value.toLowerCase();
+const search = document.getElementById("search").value.toLowerCase();
 
-  const filtered = foods.filter(food =>
+const filtered = foods.filter(food =>
 
-    (selected === "All" || food.category === selected) &&
-    food.name.toLowerCase().includes(search)
+(selected === "All" || food.category === selected) &&
+food.name.toLowerCase().includes(search)
 
-  );
+);
 
-  document.getElementById("foodList").innerHTML =
+document.getElementById("foodList").innerHTML =
 
-    filtered.map(food => `
+filtered.map(food => `
 
-      <div class="food">
+<div class="food">
 
-        <img src="${food.image}" alt="${food.name}">
+<img src="${food.image}" alt="${food.name}">
 
-        <div class="food-info">
+<div class="food-info">
 
-          <h3>${food.name}</h3>
+<h3>${food.name}</h3>
 
-          <p>${food.category}</p>
+<p>${food.category}</p>
 
-          <div class="price">₹${food.price}</div>
+<div class="price">₹${food.price}</div>
 
-          <button onclick="addCart('${food.name}')">
-            Add to Cart +
-          </button>
+<button onclick="addCart('${food.name}')">
+Add to Cart +
+</button>
 
-        </div>
+</div>
 
-      </div>
+</div>
 
-    `).join("") || "<p>No food found.</p>";
+`).join("") || "<p>No food found.</p>";
 
 }
 
 
-/* FILTER FOOD */
+/* FILTER */
 
 function filterFood(category, button) {
 
-  selected = category;
+selected = category;
 
-  document.querySelectorAll(".categories button")
-    .forEach(btn => btn.classList.remove("active"));
+document.querySelectorAll(".categories button")
+.forEach(btn => btn.classList.remove("active"));
 
-  button.classList.add("active");
+button.classList.add("active");
 
-  showFoods();
+showFoods();
 
 }
 
 
-/* ADD TO CART */
+/* ADD CART */
 
 function addCart(name) {
 
-  const food = foods.find(item => item.name === name);
+const food = foods.find(item => item.name === name);
 
-  if (!food) return;
+if (!food) return;
 
-  const existingItem = cart.find(item => item.name === name);
+const existingItem = cart.find(item => item.name === name);
 
-  if (existingItem) {
+if (existingItem) {
+existingItem.quantity++;
+} else {
+cart.push({
+name: food.name,
+price: food.price,
+quantity: 1
+});
+}
 
-    existingItem.quantity++;
-
-  } else {
-
-    cart.push({
-      name: food.name,
-      price: food.price,
-      quantity: 1
-    });
-
-  }
-
-  saveCart();
-
-  updateCart();
+saveCart();
+updateCart();
 
 }
 
 
-/* INCREASE QUANTITY */
+/* INCREASE */
 
 function increaseQty(index) {
 
-  cart[index].quantity++;
+cart[index].quantity++;
 
-  saveCart();
-
-  updateCart();
+saveCart();
+updateCart();
 
 }
 
 
-/* DECREASE QUANTITY */
+/* DECREASE */
 
 function decreaseQty(index) {
 
-  cart[index].quantity--;
+cart[index].quantity--;
 
-  if (cart[index].quantity <= 0) {
+if (cart[index].quantity <= 0) {
+cart.splice(index, 1);
+}
 
-    cart.splice(index, 1);
-
-  }
-
-  saveCart();
-
-  updateCart();
+saveCart();
+updateCart();
 
 }
 
 
-/* REMOVE ITEM */
+/* REMOVE */
 
 function removeItem(index) {
 
-  cart.splice(index, 1);
+cart.splice(index, 1);
 
-  saveCart();
-
-  updateCart();
+saveCart();
+updateCart();
 
 }
 
 
-/* SAVE CART */
+/* SAVE */
 
 function saveCart() {
 
-  localStorage.setItem(
-    "sanjeevCart",
-    JSON.stringify(cart)
-  );
+localStorage.setItem("sanjeevCart", JSON.stringify(cart));
 
 }
 
 
-/* COUPON SYSTEM */
+/* COUPON */
 
 function applyCoupon() {
 
-  const coupon = document
-    .getElementById("couponInput")
-    .value.trim()
-    .toUpperCase();
+const coupon = document.getElementById("couponInput")
+.value.trim().toUpperCase();
 
-  const subtotal = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+const subtotal = cart.reduce(
+(sum, item) => sum + item.price * item.quantity,
+0
+);
 
-  const message = document.getElementById("couponMessage");
+const message = document.getElementById("couponMessage");
 
-  if (coupon === "SAVE50" && subtotal >= 300) {
+if (coupon === "SAVE50" && subtotal >= 300) {
 
-    appliedCoupon = "SAVE50";
+appliedCoupon = "SAVE50";
 
-    message.innerHTML = "✅ ₹50 discount applied!";
+message.innerHTML = "✅ ₹50 discount applied!";
+message.style.color = "green";
 
-    message.style.color = "green";
+}
 
-  }
+else if (coupon === "WELCOME10" && subtotal >= 200) {
 
-  else if (coupon === "WELCOME10" && subtotal >= 200) {
+appliedCoupon = "WELCOME10";
 
-    appliedCoupon = "WELCOME10";
+message.innerHTML = "✅ 10% discount applied!";
+message.style.color = "green";
 
-    message.innerHTML = "✅ 10% discount applied!";
+}
 
-    message.style.color = "green";
+else {
 
-  }
+appliedCoupon = "";
 
-  else {
+message.innerHTML = "❌ Invalid coupon or minimum order not reached.";
+message.style.color = "red";
 
-    appliedCoupon = "";
+}
 
-    message.innerHTML =
-      "❌ Invalid coupon or minimum order not reached.";
+localStorage.setItem("sanjeevCoupon", appliedCoupon);
 
-    message.style.color = "red";
-
-  }
-
-  localStorage.setItem("sanjeevCoupon", appliedCoupon);
-
-  updateCart();
+updateCart();
 
 }
 
 
-/* UPDATE CART */
+/* CART UPDATE */
 
 function updateCart() {
 
-  const cartItems = document.getElementById("cartItems");
+const cartItems = document.getElementById("cartItems");
 
-  let subtotal = 0;
+let subtotal = 0;
 
-  if (cart.length === 0) {
+if (cart.length === 0) {
 
-    cartItems.innerHTML = `
+cartItems.innerHTML = `
 
-      <div style="text-align:center;padding:30px;">
+<div style="text-align:center;padding:30px;">
 
-        <h3>🛒 Your Cart is Empty</h3>
+<h3>🛒 Your Cart is Empty</h3>
 
-        <p>Add delicious food to get started!</p>
+<p>Add delicious food to get started!</p>
 
-      </div>
+</div>
 
-    `;
+`;
 
-    document.getElementById("subtotal").innerText = "₹0";
+document.getElementById("subtotal").innerText = "₹0";
+document.getElementById("deliveryFee").innerText = "₹0";
+document.getElementById("platformFee").innerText = "₹0";
+document.getElementById("discount").innerText = "₹0";
+document.getElementById("grandTotal").innerText = "₹0";
 
-    document.getElementById("deliveryFee").innerText = "₹0";
+appliedCoupon = "";
+localStorage.removeItem("sanjeevCoupon");
 
-    document.getElementById("platformFee").innerText = "₹0";
+return;
 
-    document.getElementById("discount").innerText = "₹0";
+}
 
-    document.getElementById("grandTotal").innerText = "₹0";
+cartItems.innerHTML = "";
 
-    document.getElementById("couponMessage").innerText = "";
+cart.forEach((item, index) => {
 
-    appliedCoupon = "";
+const itemTotal = item.price * item.quantity;
 
-    localStorage.removeItem("sanjeevCoupon");
+subtotal += itemTotal;
 
-    return;
+cartItems.innerHTML += `
 
-  }
+<div class="cart-item">
 
+<div class="cart-item-info">
 
-  cartItems.innerHTML = "";
+<h4>${item.name}</h4>
 
-  cart.forEach((item, index) => {
+<p>₹${item.price} × ${item.quantity}</p>
 
-    const itemTotal = item.price * item.quantity;
+<strong>₹${itemTotal}</strong>
 
-    subtotal += itemTotal;
+</div>
 
-    cartItems.innerHTML += `
+<div class="quantity-controls">
 
-      <div class="cart-item">
+<button onclick="decreaseQty(${index})">−</button>
 
-        <div class="cart-item-info">
+<span>${item.quantity}</span>
 
-          <h4>${item.name}</h4>
+<button onclick="increaseQty(${index})">+</button>
 
-          <p>₹${item.price} × ${item.quantity}</p>
+</div>
 
-          <strong>₹${itemTotal}</strong>
+<button class="remove-btn"
+onclick="removeItem(${index})">
+Remove
+</button>
 
-        </div>
+</div>
 
-        <div class="quantity-controls">
+`;
 
-          <button onclick="decreaseQty(${index})">−</button>
+});
 
-          <span>${item.quantity}</span>
+/* DELIVERY */
 
-          <button onclick="increaseQty(${index})">+</button>
+let deliveryFee = subtotal >= 499 ? 0 : 30;
 
-        </div>
+/* PLATFORM */
 
-        <button class="remove-btn"
-                onclick="removeItem(${index})">
+let platformFee = 5;
 
-          Remove
+/* DISCOUNT */
 
-        </button>
+let discount = 0;
 
-      </div>
+if (appliedCoupon === "SAVE50" && subtotal >= 300) {
 
-    `;
+discount = 50;
 
-  });
+}
 
+else if (appliedCoupon === "WELCOME10" && subtotal >= 200) {
 
-  /* DELIVERY FEE */
+discount = Math.round(subtotal * 0.10);
 
-  let deliveryFee = subtotal >= 499 ? 0 : 30;
+}
 
+else if (appliedCoupon) {
 
-  /* PLATFORM FEE */
+appliedCoupon = "";
+localStorage.removeItem("sanjeevCoupon");
 
-  let platformFee = 5;
+}
 
+/* TOTAL */
 
-  /* DISCOUNT */
+let grandTotal = subtotal + deliveryFee + platformFee - discount;
 
-  let discount = 0;
+document.getElementById("subtotal").innerText = "₹" + subtotal;
 
-  if (appliedCoupon === "SAVE50" && subtotal >= 300) {
+document.getElementById("deliveryFee").innerText =
+deliveryFee === 0 ? "FREE" : "₹" + deliveryFee;
 
-    discount = 50;
+document.getElementById("platformFee").innerText = "₹" + platformFee;
 
-  }
+document.getElementById("discount").innerText = "₹" + discount;
 
-  else if (appliedCoupon === "WELCOME10" && subtotal >= 200) {
-
-    discount = Math.round(subtotal * 0.10);
-
-  }
-
-  else if (appliedCoupon) {
-
-    appliedCoupon = "";
-
-    localStorage.removeItem("sanjeevCoupon");
-
-  }
-
-
-  /* TOTAL */
-
-  let grandTotal =
-    subtotal + deliveryFee + platformFee - discount;
-
-
-  document.getElementById("subtotal").innerText =
-    "₹" + subtotal;
-
-  document.getElementById("deliveryFee").innerText =
-    deliveryFee === 0 ? "FREE" : "₹" + deliveryFee;
-
-  document.getElementById("platformFee").innerText =
-    "₹" + platformFee;
-
-  document.getElementById("discount").innerText =
-    "₹" + discount;
-
-  document.getElementById("grandTotal").innerText =
-    "₹" + grandTotal;
+document.getElementById("grandTotal").innerText = "₹" + grandTotal;
 
 }
 
@@ -1167,584 +1198,114 @@ function updateCart() {
 
 function checkout() {
 
-  if (!cart.length) {
-
-    alert("Please add food to your cart first!");
-
-    return;
-
-  }
-
-  const name = prompt("Enter your full name:");
-
-  if (!name || !name.trim()) return;
-
-
-  const phone = prompt("Enter your 10-digit mobile number:");
-
-  if (!phone || !/^[6-9]\d{9}$/.test(phone.trim())) {
-
-    alert("Enter a valid mobile number.");
-
-    return;
-
-  }
-
-
-  const address = prompt("Enter your delivery address:");
-
-  if (!address || !address.trim()) return;
-
-
-  const subtotal = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
-
-  const deliveryFee = subtotal >= 499 ? 0 : 30;
-
-  const platformFee = 5;
-
-  let discount = 0;
-
-  if (appliedCoupon === "SAVE50" && subtotal >= 300) {
-
-    discount = 50;
-
-  }
-
-  else if (appliedCoupon === "WELCOME10" && subtotal >= 200) {
-
-    discount = Math.round(subtotal * 0.10);
-
-  }
-
-
-  const total = subtotal + deliveryFee + platformFee - discount;
-
-
-  const orderDetails = cart.map(item =>
-    `${item.name} × ${item.quantity} = ₹${item.price * item.quantity}`
-  ).join("\n");
-
-
-  const confirmed = confirm(
-
-    "SANJEEV ORDER\n\n" +
-
-    "Name: " + name +
-
-    "\nPhone: " + phone +
-
-    "\nAddress: " + address +
-
-    "\n\n" + orderDetails +
-
-    "\n\nSubtotal: ₹" + subtotal +
-
-    "\nDelivery: ₹" + deliveryFee +
-
-    "\nPlatform Fee: ₹" + platformFee +
-
-    "\nDiscount: ₹" + discount +
-
-    "\nTotal: ₹" + total +
-
-    "\n\nConfirm order?"
-
-  );
-
-
-  if (confirmed) {
-
-    const orderID = "SJ" + Date.now();
-
-    alert(
-
-      "Order placed successfully!\n\n" +
-
-      "Order ID: " + orderID +
-
-      "\nTotal: ₹" + total +
-
-      "\n\nThank you " + name + "!"
-
-    );
-
-    cart = [];
-
-    appliedCoupon = "";
-
-    localStorage.removeItem("sanjeevCoupon");
-
-    saveCart();
-
-    updateCart();
-
-  }
-
+if (!cart.length) {
+alert("Please add food to your cart first!");
+return;
 }
 
+const name = prompt("Enter your full name:");
 
-/* INITIALIZE */
+if (!name || !name.trim()) return;
 
-showFoods();
+const phone = prompt("Enter your 10-digit mobile number:");
 
-updateCart();
-
-</script>
-
-<!-- LOGIN / SIGNUP -->
-
-<script>
-
-function openForm(type) {
-
-  document.getElementById("loginForm").style.display = "none";
-
-  document.getElementById("signupForm").style.display = "none";
-
-  if (type === "login") {
-
-    document.getElementById("loginForm").style.display = "block";
-
-  } else {
-
-    document.getElementById("signupForm").style.display = "block";
-
-  }
-
+if (!phone || !/^[6-9]\d{9}$/.test(phone.trim())) {
+alert("Enter a valid mobile number.");
+return;
 }
 
-function closeForm() {
+const address = prompt(
+"Enter your delivery address:",
+selectedAddress ? selectedAddress.displayName : ""
+);
 
-  document.getElementById("loginForm").style.display = "none";
+if (!address || !address.trim()) return;
 
-  document.getElementById("signupForm").style.display = "none";
+const subtotal = cart.reduce(
+(sum, item) => sum + item.price * item.quantity,
+0
+);
 
+const deliveryFee = subtotal >= 499 ? 0 : 30;
+
+const platformFee = 5;
+
+let discount = 0;
+
+if (appliedCoupon === "SAVE50" && subtotal >= 300) {
+discount = 50;
 }
 
-</script>
-
-<!-- PROFILE -->
-
-<script>
-
-function toggleProfileMenu() {
-
-  document.getElementById("profileDropdown")
-    .classList.toggle("show");
-
+else if (appliedCoupon === "WELCOME10" && subtotal >= 200) {
+discount = Math.round(subtotal * 0.10);
 }
 
-document.addEventListener("click", function(event) {
+const total = subtotal + deliveryFee + platformFee - discount;
 
-  const container = document.querySelector(".profile-container");
+const orderDetails = cart.map(item =>
+`${item.name} × ${item.quantity} = ₹${item.price * item.quantity}`
+).join("\n");
 
-  if (container && !container.contains(event.target)) {
+const confirmed = confirm(
 
-    document.getElementById("profileDropdown")
-      .classList.remove("show");
+"SANJEEV ORDER\n\n" +
 
-  }
+"Name: " + name +
+"\nPhone: " + phone +
+"\nAddress: " + address +
 
-});
+"\n\n" + orderDetails +
 
-function showProfile() {
-  alert("My Profile");
-}
+"\n\nSubtotal: ₹" + subtotal +
+"\nDelivery: ₹" + deliveryFee +
+"\nPlatform Fee: ₹" + platformFee +
+"\nDiscount: ₹" + discount +
+"\nTotal: ₹" + total +
 
-function showOrders() {
-  alert("My Orders");
-}
+"\n\nConfirm order?"
 
-function showAddresses() {
-  alert("Saved Addresses");
-}
+);
 
-function showFavorites() {
-  alert("My Favorites");
-}
+if (confirmed) {
 
-function showSettings() {
-  alert("Settings");
-}
+const orderID = "SJ" + Date.now();
 
-</script>
-
-<!-- ORDER TRACKING -->
-
-<script>
-
-function trackOrder() {
-
-  const id = document
-    .getElementById("orderId")
-    .value.trim();
-
-  if (!id) {
-
-    alert("Please enter your Order ID");
-
-    return;
-
-  }
-
-  const result = document.getElementById("trackingResult");
-
-  result.innerHTML = `
-
-    <h3>Order: ${id.replace(/[<>&"]/g, "")}</h3>
-
-    <p>✅ Order Placed</p>
-
-    <p>✅ Food Preparing</p>
-
-    <p>🛵 Out for Delivery</p>
-
-    <p>⏳ Delivered</p>
-
-    <h3 style="color:#e23744;">
-      Demo tracking status
-    </h3>
-
-  `;
-
-}
-
-</script>
-
-<!-- FIREBASE AUTHENTICATION -->
-
-<script type="module">
-
-import { initializeApp }
-
-from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
-
-import {
-
-  getAuth,
-
-  createUserWithEmailAndPassword,
-
-  signInWithEmailAndPassword,
-
-  updateProfile,
-
-  onAuthStateChanged,
-
-  signOut
-
-}
-
-from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
-
-
-const firebaseConfig = {
-
-  apiKey: "AIzaSyDhXSgQr-f6is4IIDmP7uljj1bg9okurBU",
-
-  authDomain: "sanjeev-food-delivery.firebaseapp.com",
-
-  projectId: "sanjeev-food-delivery",
-
-  storageBucket: "sanjeev-food-delivery.firebasestorage.app",
-
-  messagingSenderId: "580683471077",
-
-  appId: "1:580683471077:web:6372c35fff3b75fc56dc0c"
-
+const order = {
+id: orderID,
+name: name,
+phone: phone,
+address: address,
+items: [...cart],
+total: total,
+status: "Order Placed"
 };
 
+localStorage.setItem("sanjeevLastOrder", JSON.stringify(order));
 
-const app = initializeApp(firebaseConfig);
+alert(
+"Order placed successfully!\n\n" +
+"Order ID: " + orderID +
+"\nTotal: ₹" + total +
+"\n\nThank you " + name + "!"
+);
 
-const auth = getAuth(app);
+cart = [];
+appliedCoupon = "";
 
+localStorage.removeItem("sanjeevCoupon");
 
-/* SIGNUP */
+saveCart();
+updateCart();
 
-document.getElementById("signupBtn")
-  .addEventListener("click", async () => {
+document.getElementById("orderId").value = orderID;
 
-    const name = document
-      .getElementById("signupName")
-      .value.trim();
-
-    const email = document
-      .getElementById("signupEmail")
-      .value.trim();
-
-    const password = document
-      .getElementById("signupPassword")
-      .value;
-
-    if (!name || !email || !password) {
-
-      alert("Please fill all fields.");
-
-      return;
-
-    }
-
-    if (password.length < 6) {
-
-      alert("Password must be at least 6 characters.");
-
-      return;
-
-    }
-
-    try {
-
-      const userCredential =
-        await createUserWithEmailAndPassword(
-          auth, email, password
-        );
-
-      await updateProfile(userCredential.user, {
-        displayName: name
-      });
-
-      alert("Account created successfully!");
-
-      closeForm();
-
-    } catch (error) {
-
-      alert("Signup Error: " + error.message);
-
-    }
-
-  });
-
-
-/* LOGIN */
-
-document.getElementById("loginBtn")
-  .addEventListener("click", async () => {
-
-    const email = document
-      .getElementById("loginEmail")
-      .value.trim();
-
-    const password = document
-      .getElementById("loginPassword")
-      .value;
-
-    if (!email || !password) {
-
-      alert("Please enter email and password.");
-
-      return;
-
-    }
-
-    try {
-
-      await signInWithEmailAndPassword(
-        auth, email, password
-      );
-
-      alert("Login successful!");
-
-      closeForm();
-
-    } catch (error) {
-
-      alert("Login Error: " + error.message);
-
-    }
-
-  });
-
-
-/* LOGOUT */
-
-document.getElementById("dropdownLogout")
-  .addEventListener("click", async () => {
-
-    try {
-
-      await signOut(auth);
-
-      document.getElementById("profileDropdown")
-        .classList.remove("show");
-
-      alert("Logged out successfully!");
-
-    } catch (error) {
-
-      alert("Logout Error: " + error.message);
-
-    }
-
-  });
-
-
-/* AUTH STATE */
-
-onAuthStateChanged(auth, (user) => {
-
-  const profileBar =
-    document.getElementById("profileBar");
-
-  const profileName =
-    document.getElementById("profileName");
-
-  const profileEmail =
-    document.getElementById("profileEmail");
-
-  const authButtons =
-    document.getElementById("authButtons");
-
-  const dropdown =
-    document.getElementById("profileDropdown");
-
-  const welcome =
-    document.getElementById("userWelcome");
-
-  if (user) {
-
-    profileBar.style.display = "flex";
-
-    profileName.textContent =
-      user.displayName || "User";
-
-    profileEmail.textContent =
-      user.email || "";
-
-    authButtons.style.display = "none";
-
-    welcome.textContent =
-      "Welcome, " + (user.displayName || user.email) + "!";
-
-  } else {
-
-    profileBar.style.display = "none";
-
-    authButtons.style.display = "block";
-
-    dropdown.classList.remove("show");
-
-    welcome.textContent = "";
-
-  }
-
-});
-
-</script>
-
-<!-- DARK MODE -->
-
-<script>
-
-document.addEventListener("DOMContentLoaded", function() {
-
-  const themeButton =
-    document.getElementById("themeToggle");
-
-  function applyTheme(isDark) {
-
-    if (isDark) {
-
-      document.body.classList.add("dark-mode");
-
-      themeButton.innerHTML = "☀️ Light Mode";
-
-      localStorage.setItem("theme", "dark");
-
-    } else {
-
-      document.body.classList.remove("dark-mode");
-
-      themeButton.innerHTML = "🌙 Dark Mode";
-
-      localStorage.setItem("theme", "light");
-
-    }
-
-  }
-
-  applyTheme(localStorage.getItem("theme") === "dark");
-
-  themeButton.addEventListener("click", function() {
-
-    const isDark =
-      document.body.classList.contains("dark-mode");
-
-    applyTheme(!isDark);
-
-  });
-
-});
-
-</script>
-
-<!-- LOCATION -->
-
-<script>
-
-async function getLocation() {
-
-  const locationText =
-    document.getElementById("locationText");
-
-  locationText.textContent = "Finding location...";
-
-  if (!navigator.geolocation) {
-
-    locationText.textContent =
-      "Geolocation is not supported.";
-
-    return;
-
-  }
-
-  navigator.geolocation.getCurrentPosition(
-
-    async function(position) {
-
-      const lat = position.coords.latitude;
-
-      const lon = position.coords.longitude;
-
-      locationText.textContent =
-        "Latitude: " + lat + " | Longitude: " + lon;
-
-      try {
-
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
-        );
-
-        const data = await response.json();
-
-        locationText.textContent =
-          data.display_name || "Location found.";
-
-      } catch (error) {
-
-        locationText.textContent =
-          "Location found, but address unavailable.";
-
-      }
-
-    },
-
-    function(error) {
-
-      locationText.textContent =
-        "Unable to get location. Please allow location access.";
-
-    }
-
-  );
+trackOrder();
 
 }
 
-</script>
+}
 
-</body>
-</html>
+
+/* ORDER TRACKING */
+
+function trac
