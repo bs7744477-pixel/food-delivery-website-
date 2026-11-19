@@ -454,6 +454,22 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+    document.getElementById("signupBtn").addEventListener("click", async () => {
+
+    const email = document.getElementById("signupEmail").value;
+    const password = document.getElementById("signupPassword").value;
+
+    try {
+        await createUserWithEmailAndPassword(auth, email, password);
+
+        alert("Account created successfully!");
+        closeForm();
+
+    } catch (error) {
+        alert(error.message);
+    }
+
+});
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
