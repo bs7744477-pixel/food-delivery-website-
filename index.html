@@ -146,6 +146,28 @@ footer {
 <header>
   <h1>SANJEEV</h1>
   <p>Delicious Food, Delivered To You!</p>
+
+  <p id="userWelcome" style="margin-top:15px;"></p>
+
+  <div style="margin-top:15px;" id="authButtons">
+
+    <button id="loginButton" onclick="openForm('login')"
+    style="padding:10px 20px; margin:5px; border:none; border-radius:5px; background:white; color:#e23744;">
+      Login
+    </button>
+
+    <button id="signupButton" onclick="openForm('signup')"
+    style="padding:10px 20px; margin:5px; border:none; border-radius:5px; background:#222; color:white;">
+      Signup
+    </button>
+
+    <button id="logoutButton"
+    style="display:none; padding:10px 20px; margin:5px; border:none; border-radius:5px; background:#222; color:white;">
+      Logout
+    </button>
+
+  </div>
+</header>
   <p id="userWelcome" style="margin-top:10px; font-weight:bold;"></p>
   
   <div style="margin-top:15px;">
@@ -504,11 +526,26 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
 onAuthStateChanged(auth, (user) => {
 
     const welcome = document.getElementById("userWelcome");
+    const login = document.getElementById("loginButton");
+    const signup = document.getElementById("signupButton");
+    const logout = document.getElementById("logoutButton");
 
     if (user) {
+
         welcome.textContent = "Welcome, " + (user.displayName || user.email) + "!";
+
+        login.style.display = "none";
+        signup.style.display = "none";
+        logout.style.display = "inline-block";
+
     } else {
+
         welcome.textContent = "";
+
+        login.style.display = "inline-block";
+        signup.style.display = "inline-block";
+        logout.style.display = "none";
+
     }
 
 });
