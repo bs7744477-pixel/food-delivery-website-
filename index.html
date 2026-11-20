@@ -1494,7 +1494,24 @@ document.addEventListener("DOMContentLoaded", function() {
 
   applyTheme(savedTheme === "dark");
 
-  // Toggle theme
+  // DARK MODE
+
+document.addEventListener("DOMContentLoaded", function() {
+
+  const themeButton = document.getElementById("themeToggle");
+
+  function applyTheme(isDark) {
+
+    if (isDark) {
+      document.body.classList.add("dark-mode");
+      themeButton.innerHTML = "☀️ Light Mode";
+    } else {
+      document.body.classList.remove("dark-mode");
+      themeButton.innerHTML = "🌙 Dark Mode";
+    }
+
+  }
+
   themeButton.addEventListener("click", function() {
 
     const isDark = document.body.classList.contains("dark-mode");
@@ -1505,18 +1522,43 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 
+
+// LOCATION
+
+function getLocation() {
+
+  const locationText = document.getElementById("locationText");
+
+  locationText.innerHTML = "📍 Detecting location...";
+
+  if (!navigator.geolocation) {
+    locationText.innerHTML = "Location not supported.";
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+
+    function(position) {
+
+      locationText.innerHTML =
+        "📍 Location detected successfully!<br>" +
+        "Latitude: " + position.coords.latitude + "<br>" +
+        "Longitude: " + position.coords.longitude;
+
+    },
+
+    function() {
+
+      locationText.innerHTML =
+        "❌ Unable to detect location.";
+
+    }
+
+  );
+
+}
+
 </script>
 
 </body>
 </html>
-
-document.addEventListener("DOMContentLoaded", function() {
-
-  const themeButton =
-    document.getElementById("themeToggle");
-
-  if (!themeButton) return;
-
-  function applyTheme(isDark) {
-
-    if (isDark
